@@ -72,7 +72,7 @@ def test(args):
 	model = Seq2SeqNet.load_from_checkpoint(args['testing_model'])
 	model.to('cuda')
 	tokenizer = T5TokenizerFast.from_pretrained(args['pretrained_model'], bos_token="[bos]", eos_token="[eos]", sep_token="[sep]")
-	test_dataloader = get_test_dataloader(args, tokenizer)
+	test_dataloader = get_train_dataloader(args, tokenizer)
 	n_correct = 0
 	size = 0
 	log = []
