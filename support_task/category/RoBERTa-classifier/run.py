@@ -1,7 +1,6 @@
 import os
 import torch
 import random
-import pickle
 import numpy as np
 from tqdm import tqdm
 from model import RobertaNumeralClassifier
@@ -12,6 +11,7 @@ from data_process import get_train_dataloader, get_eval_dataloader, get_test_dat
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 def seed_everything(seed):
+	print('Setting global seed to {}'.format(seed))
 	torch.manual_seed(seed)
 	torch.cuda.manual_seed(seed)
 	torch.cuda.manual_seed_all(seed)
@@ -26,7 +26,7 @@ def train(args):
 	category = get_all_category(args)
 
 	model = RobertaNumeralClassifier.from_pretrained(args['pretrained_model'], num_labels=len(category))
-	model.to('cuda')
+	model.to(torch.device("cuda"))
 
 	train_dataloader = get_train_dataloader(args, tokenizer)
 
@@ -82,10 +82,7 @@ def test(args):
 	tokenizer = RobertaTokenizerFast.from_pretrained(args['pretrained_model'])
 	test_dataloader = get_test_dataloader(args, tokenizer)
 	model = RobertaNumeralClassifier.from_pretrained(args['testing_model'], num_labels=len(category))
-	'''
-	with open('model.pickle', 'rb') as fp:
-		model = pickle.load(fp)
-	'''
+
 	model.to('cuda')
 	model.eval()
 	loss_fn = torch.nn.CrossEntropyLoss()

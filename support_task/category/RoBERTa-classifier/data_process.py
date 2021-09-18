@@ -1,5 +1,7 @@
 import json
 import torch
+import random
+import numpy as np
 from tqdm import tqdm
 from torch.utils.data import DataLoader, Dataset
 
@@ -26,7 +28,7 @@ def get_all_category(args):
 	category_set = set()
 	for d in data:
 		category_set.add(d['category'])
-	return [category for category in category_set]
+	return sorted([category for category in category_set])
 
 def get_train_dataloader(args, tokenizer):
 	category = get_all_category(args)
@@ -70,7 +72,7 @@ def get_train_dataloader(args, tokenizer):
 						args['batch_size'], 
 						shuffle=True, 
 						collate_fn=collate_fn, 
-						num_workers=4
+						num_workers=4, 
 					)
 	return train_dataloader
 
