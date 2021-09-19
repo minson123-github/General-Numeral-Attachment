@@ -88,7 +88,7 @@ def train(args):
 			ckpt_dir = os.path.join(args['model_dir'], 'checkpoints')
 			if not os.path.exists(ckpt_dir):
 				os.makedirs(ckpt_dir)
-			ckpt_name = 'epoch_ckpt_{}'.format(step_cnt // args['saving_epochs'])
+			ckpt_name = 'epoch_ckpt_{}'.format(epoch // args['saving_epochs'])
 			ckpt_path = os.path.join(ckpt_dir, ckpt_name)
 			model.save_pretrained(ckpt_path)
 	
