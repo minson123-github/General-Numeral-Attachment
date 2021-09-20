@@ -44,7 +44,6 @@ def train(args):
 		pbar = tqdm(train_dataloader, position=0, desc='Epoch {}'.format(epoch))
 		n_correct, total = 0, 0
 		for batch in pbar:
-			optimizer.zero_grad()
 
 			inputs, numeral_position, start_position, end_position = batch
 			start_logits, end_logits = model(inputs.cuda(), numeral_position)
@@ -53,6 +52,7 @@ def train(args):
 			start_loss = loss_fn(start_logits, start_position)
 			end_loss = loss_fn(end_logits, end_position)
 			loss = (start_loss + end_loss) / 2
+			loss = loss / args['accumulation_steps']
 			start_pred = torch.argmax(start_logits, dim=-1)
 			end_pred = torch.argmax(end_logits, dim=-1)
 			for start_p, end_p, start_r, end_r, input_ids in zip(start_pred, end_pred, start_position, end_position, inputs):
@@ -74,7 +74,11 @@ def train(args):
 			step_cnt += 1
 
 			loss.backward()
-			optimizer.step()
+
+			if step_cnt % args['accumulation_steps'] == 0:
+				optimizer.step()
+				optimizer.zero_grad()
+
 
 			if type(args['saving_steps']) != type(None) and step_cnt % args['saving_steps'] == 0:
 				ckpt_dir = os.path.join(args['model_dir'], 'checkpoints')

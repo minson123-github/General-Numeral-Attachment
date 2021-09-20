@@ -14,6 +14,7 @@ def get_config():
 	parser.add_argument('--padding_length', type=int, default=512, help='tokenize padding length.')
 	parser.add_argument('--extend_token', type=int, help='Number of extra token before target numeral and after target numeral.')
 	parser.add_argument('--batch_size', type=int, help='Batch size in dataloader parameter.')
+	parser.add_argument('--accumulation_steps', type=int, default=1, help='Number of step for gradient accumulate.')
 	parser.add_argument('--lr', type=float, help='Learning rate for optimizer.')
 	parser.add_argument('--n_epoch', type=int, default=1, help='Number of epoch for training.')
 	parser.add_argument('--seed', type=int, default=24, help='random seed.')
