@@ -20,7 +20,10 @@ and
 ```
 bash test.sh $predict-day
 ```
-In here, $predict-day represent the day of information you want to predict.
+In here, $predict-day represent the day of information you want to predict. For example, if you want to reproduce day-3 predict model. 
+```
+bash train.sh 3
+```
 
 Otherwise, you just run:
 ```
